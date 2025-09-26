@@ -13,16 +13,43 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        flavorDimensions+="channel"
+        buildConfigField "boolean", "IS_BUILD_FOR_GOOGLE_PLAY", "false"
+        buildConfigField "boolean", "IS_BUILD_FOR_XIAOMI", "false"
+        buildConfigField "boolean", "IS_BUILD_FOR_HUAWEI", "false"
+    }
+    buildFeatures {
+        buildConfig true
     }
 
     buildTypes {
         release {
+            buildConfigField("boolean", "IS_DEBUG", "false")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            buildConfigField("boolean", "IS_DEBUG", "true")
+        }
     }
+
+    productFlavors{
+        googleplay{
+            buildConfigField "boolean", "IS_BUILD_FOR_GOOGLE_PLAY", "true"
+        }
+
+        huawei{
+            buildConfigField "boolean", "IS_BUILD_FOR_HUAWEI", "true"
+        }
+
+        xiaomi{
+            buildConfigField "boolean", "IS_BUILD_FOR_XIAOMI", "true"
+        }
+
+
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11

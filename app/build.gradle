@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'com.android.application'
 }
@@ -36,6 +38,19 @@ android {
             storePassword '123456'
             keyAlias 'testKeyStore'
             keyPassword '123456'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        if (!variant.buildType.name.contains('debug')) {
+            variant.outputs.each { output ->
+                def file = output.getOutputFile()
+                file.getParentFile().listFiles().each { child ->
+                    child.delete()
+                }
+                def time = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())
+                output.setOutputFileName("TestLog_${variant.productFlavors[0].name}_v${variant.versionName}-${time}.apk")
+            }
         }
     }
 

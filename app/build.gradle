@@ -2,6 +2,13 @@ plugins {
     id 'com.android.application'
 }
 
+
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+def versionRevior = 0
+
+
 android {
 
     namespace "com.xch.testlog"
@@ -11,8 +18,8 @@ android {
         applicationId "com.xch.testlog"
         minSdk 28
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode versionMajor * 100000000 + versionMinor * 100000 + versionPatch * 100 + versionRevior
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionRevior}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions+="channel"
         buildConfigField "boolean", "IS_BUILD_FOR_GOOGLE_PLAY", "false"
@@ -23,11 +30,21 @@ android {
         buildConfig true
     }
 
+    signingConfigs {//签名的配置
+        release {
+            storeFile file("D:\\testKeyStore\\testKeyStore")
+            storePassword '123456'
+            keyAlias 'testKeyStore'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
         release {
             buildConfigField("boolean", "IS_DEBUG", "false")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release//打包命令行：gradlew assembleRelease
         }
         debug {
             buildConfigField("boolean", "IS_DEBUG", "true")

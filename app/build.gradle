@@ -11,6 +11,11 @@ def versionPatch = 0
 def versionRevior = 1
 
 
+def releaseTime() {
+    return new Date().format("yyyyMMdd-HHmmss", TimeZone.getDefault());
+}
+
+
 android {
 
     namespace "com.xch.testlog"
@@ -27,10 +32,12 @@ android {
         buildConfigField "boolean", "IS_BUILD_FOR_GOOGLE_PLAY", "false"
         buildConfigField "boolean", "IS_BUILD_FOR_XIAOMI", "false"
         buildConfigField "boolean", "IS_BUILD_FOR_HUAWEI", "false"
+        setProperty("archivesBaseName", "TestLog_v${versionName}-v${releaseTime()}")
     }
     buildFeatures {
         buildConfig true
     }
+
 
     signingConfigs {//签名的配置
         release {
@@ -41,18 +48,18 @@ android {
         }
     }
 
-    android.applicationVariants.all { variant ->
-        if (!variant.buildType.name.contains('debug')) {
-            variant.outputs.each { output ->
-                def file = output.getOutputFile()
-                file.getParentFile().listFiles().each { child ->
-                    child.delete()
-                }
-                def time = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())
-                output.setOutputFileName("TestLog_${variant.productFlavors[0].name}_v${variant.versionName}-${time}.apk")
-            }
-        }
-    }
+//    android.applicationVariants.all { variant ->
+//        if (!variant.buildType.name.contains('debug')) {
+//            variant.outputs.each { output ->
+//                def file = output.getOutputFile()
+//                file.getParentFile().listFiles().each { child ->
+//                    child.delete()
+//                }
+//                def time = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())
+//                output.setOutputFileName("TestLog_${variant.productFlavors[0].name}_v${variant.versionName}-${time}.apk")
+//            }
+//        }
+//    }
 
     buildTypes {
         release {
